@@ -1,10 +1,6 @@
 (ns datomic-lab.core
   [:require [datomic.api :as d]])
 
-(defn -main
-  "I don't do a whole lot."
-  [& args]
-  (println "Hello, World!"))
 
 (def uri "datomic:mem://hello")
 
