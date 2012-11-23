@@ -1,4 +1,6 @@
 (ns datomic-lab.tutorial
+  [:use
+   [clojure.pprint :only [pp pprint print-table]]]
   [:require
    [datomic.api     :as d]])
 
@@ -10,3 +12,5 @@
 (def conn (d/connect uri))
 
 (def schema-tx (read-string (slurp "resources/seattle-schema.dtm")))
+
+@(d/transact conn schema-tx)
