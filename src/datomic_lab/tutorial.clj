@@ -11,6 +11,26 @@
 
 (def conn (d/connect uri))
 
-(def schema-tx (read-string (slurp "resources/seattle-schema.dtm")))
+(def base-dir "doc/datomic-0.8.3599-samples/seattle/")
+
+(def schema-tx (read-string (slurp (str base-dir "seattle-schema.dtm"))))
 
 @(d/transact conn schema-tx)
+
+(def data-tx (read-string (slurp (str base-dir "seattle-data0.dtm"))))
+
+@(d/transact conn data-tx)
+
+(defn count-communities
+  []
+  (-> '[:find ?c :where [?c :community/name]]
+      (d/q (d/db conn))
+      count))
+
+(defn list-all-communities-name
+  []
+  (let [db (d/db conn)]
+    (-> '[:find ?c :where [?c :community/name]]
+        (d/q db)
+        (->> (map (fn [[id]] (:community/name (d/entity db id)))))
+        pprint)))
