@@ -23,23 +23,24 @@
 
 (defn count-communities
   []
-  (-> '[:find ?c :where [?c :community/name]]
-      (d/q (d/db conn))
-      count))
+  (-> '[:find ?c
+        :where
+        [?c :community/name]]
+      (d/q (d/db conn))))
 
 (defn list-all-communities-name
   []
   (let [db (d/db conn)]
-    (-> '[:find ?c :where [?c :community/name]]
+    (-> '[:find ?c
+          :where
+          [?c :community/name]]
         (d/q db)
-        (->> (map (fn [[id]] (:community/name (d/entity db id)))))
-        pprint)))
+        (->> (map (fn [[id]] (:community/name (d/entity db id))))))))
 
 (defn list-com-name-url
   []
-  (-> conn
-      d/db
-      (->> (d/q '[:find ?n ?u
-                  :where
-                  [?c :community/name ?n]
-                  [?c :community/url  ?u]]))))
+  (-> '[:find ?n ?u
+        :where
+        [?c :community/name ?n]
+        [?c :community/url  ?u]]
+      (d/q (d/db conn))))
