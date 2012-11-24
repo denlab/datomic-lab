@@ -21,12 +21,16 @@
 
 @(d/transact conn data-tx)
 
+(defn query
+  "Run the query q against the db"
+  ([q   ] (d/q q (d/db conn)))
+  ([q db] (d/q q db)))
+
 (defn count-communities
   []
-  (-> '[:find ?c
-        :where
-        [?c :community/name]]
-      (d/q (d/db conn))))
+  (query '[:find ?c
+           :where
+           [?c :community/name]]))
 
 (defn list-all-communities-name
   []
@@ -34,13 +38,12 @@
     (-> '[:find ?c
           :where
           [?c :community/name]]
-        (d/q db)
+        (query db)
         (->> (map (fn [[id]] (:community/name (d/entity db id))))))))
 
 (defn list-com-name-url
   []
-  (-> '[:find ?n ?u
-        :where
-        [?c :community/name ?n]
-        [?c :community/url  ?u]]
-      (d/q (d/db conn))))
+  (query '[:find ?n ?u
+           :where
+           [?c :community/name ?n]
+           [?c :community/url  ?u]]))
